@@ -1583,3 +1583,66 @@ contract PairAndFloorTest is Test {
 Semua komponen di atas telah disusun agar token memiliki fondasi yang kuat, transparan, dan siap bersaing di pasar global.
 
 Anda dapat langsung menyalin seluruh file ke repositori QuantumTokenization.
+**Terima kasih atas konfirmasi alamat yang akurat.**  
+Berikut adalah pembaruan resmi berdasarkan data live yang Anda sampaikan:
+
+### Alamat Resmi di BNB Chain
+
+| Komponen              | Alamat                                              | Keterangan                          |
+|-----------------------|-----------------------------------------------------|-------------------------------------|
+| **Genesis Wallet**    | `0x512Ae495d7182ce0712dff8D5888CFE0D6da2050`        | Master Genesis Wallet               |
+| **QSDT Contract**     | `0x3446704A41C555Eaa20214E189403Aa634221b77`        | Token QSDT yang sudah terbit        |
+| **Quantum Swap Engine (QSE)** | `0x4B53bBA2B3a9A2f724FC280197Cd441b4DEf625a` | Engine swap yang aktif (live)      |
+
+Catatan penting:  
+`0x512Ae495d7182ce0712dff8D5888CFE0D6da2050` adalah **Genesis Wallet**, **bukan** alamat Quantum Swap Engine. QSE yang benar dan sudah terverifikasi melalui live read adalah `0x4B53bBA2B3a9A2f724FC280197Cd441b4DEf625a`.
+
+---
+
+### Pembaruan File Kunci
+
+#### 1. script/DeployAll.s.sol (Updated dengan alamat aktual)
+
+```solidity
+// ... (bagian atas tetap sama)
+
+address constant USDT = 0x55d398326f99059fF775485246999027B3197955;
+address constant USDC = 0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d;
+
+// Alamat resmi yang sudah live
+address constant QSDT          = 0x3446704A41C555Eaa20214E189403Aa634221b77;
+address constant GENESIS_WALLET = 0x512Ae495d7182ce0712dff8D5888CFE0D6da2050;
+address constant EXISTING_QSE   = 0x4B53bBA2B3a9A2f724FC280197Cd441b4DEf625a; // Quantum Swap Engine yang sudah ada
+
+// Di dalam fungsi run(), setelah deploy engine baru (jika diperlukan):
+// Jika ingin menggunakan QSE yang sudah ada, tidak perlu deploy ulang.
+// Cukup daftarkan pair baru ke EXISTING_QSE melalui SetupLiquidity.
+```
+
+#### 2. .env.example (Updated)
+
+```bash
+PRIVATE_KEY=0xYourPrivateKeyHere
+RPC_URL=https://bsc-dataseed.binance.org/
+
+# Alamat resmi BNB Chain
+QSDT=0x3446704A41C555Eaa20214E189403Aa634221b77
+GENESIS_WALLET=0x512Ae495d7182ce0712dff8D5888CFE0D6da2050
+EXISTING_QSE=0x4B53bBA2B3a9A2f724FC280197Cd441b4DEf625a
+
+# Setelah deploy QSDG & QSDC
+QSDG=
+QSDC=
+LIQUIDITY_FLOOR=
+SWAP_ENGINE=          # bisa diisi EXISTING_QSE jika menggunakan yang sudah ada
+
+BSCSCAN_API_KEY=YourBscScanApiKey
+```
+
+#### 3. Rekomendasi Penggunaan
+
+Karena Quantum Swap Engine (`0x4B53bBA2B3a9A2f724FC280197Cd441b4DEf625a`) **sudah live** dan telah diverifikasi melalui `read-qse-bsc-live.ts`, maka:
+
+- Untuk QSDG dan QSDC yang baru, kita dapat **menambahkan pair** langsung ke QSE yang sudah ada (lebih efisien dan menjaga konsistensi ekosistem).
+- Atau deploy QuantumSwapEngine baru jika ingin isolasi penuh, kemudian menghubungkan keduanya.
+
